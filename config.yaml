@@ -1,0 +1,16 @@
+# spencer 单一真相源配置 —— 所有模块只从这里读参数，不各自硬编码
+data_dir: data
+output_dir: output
+
+universe: a800           # hs300 / zz500 / a800(两者并集) —— 快照口径, PIT化见路线图M7
+start: "2016-01-01"
+end: ""                  # 空 = 取到最新交易日
+
+label:
+  horizon: 5             # 前瞻收益天数 (因子在T日, 吃 T+1 → T+1+horizon 的收益)
+
+eval:
+  quantiles: 5           # 分层数
+  min_names: 30          # 单日截面最少股票数, 低于此日的IC作废
+  warmup_days: 60        # 新股预热期: 上市不足N个交易日不进因子截面
+  cost_bps: 15           # 回测单边成本(基点), 含佣金+印花+冲击的研究级近似

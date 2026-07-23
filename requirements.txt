@@ -1,0 +1,6 @@
+baostock
+pandas
+numpy
+pyarrow
+matplotlib
+PyYAML
