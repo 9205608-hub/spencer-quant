@@ -16,6 +16,11 @@ universe_pit:            # PIT宇宙构造参数(build_pit_universe)
   exclude_st: true
   top_n_liquidity: 1500  # 过去60日成交额中位数截面前N; null=不截断
 
+portfolio:               # 组合默认参数(2026-07-23 rebal_sweep 定: 6格高原上按成本稳健性取)
+  top_n: 50
+  buffer_n: 80
+  rebal_days: 20         # 6.8x年换手拿到与11.5x同档的超额sharpe(0.68), 见 output/rebal_sweep.csv
+
 eval:
   quantiles: 5           # 分层数
   min_names: 30          # 单日截面最少股票数, 低于此日的IC作废

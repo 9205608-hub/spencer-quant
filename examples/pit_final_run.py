@@ -223,7 +223,9 @@ def composite_and_portfolio(store, uni, styles, industry, fwd, fwd1, fwd_neut, h
     log_run(LEDGER, res, params={"mode": "comp_eq", "universe": "pit_full_market",
                                  "masks": True})
 
-    weights = topn_buffer_weights(comp_o, top_n=50, buffer_n=80, rebal_days=h)
+    pf = CFG.get("portfolio", {"top_n": 50, "buffer_n": 80, "rebal_days": h})
+    weights = topn_buffer_weights(comp_o, top_n=pf["top_n"],
+                                  buffer_n=pf["buffer_n"], rebal_days=pf["rebal_days"])
     port_ret = (weights.shift(0) * fwd1).sum(axis=1)          # 权重日=信号日, fwd1 自带 T+1 建仓
     to = turnover_series(weights)
     cost_daily = to * (CFG["eval"]["cost_bps"] / 1e4)
