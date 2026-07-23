@@ -1,6 +1,6 @@
-data/
-output/
+/data/
+/output/
 __pycache__/
 *.pyc
 .DS_Store
-research_ledger.csv
+/research_ledger.csv

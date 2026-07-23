@@ -9,6 +9,13 @@ end: ""                  # 空 = 取到最新交易日
 label:
   horizon: 5             # 前瞻收益天数 (因子在T日, 吃 T+1 → T+1+horizon 的收益)
 
+fundamentals_cache: data/raw/fundamentals_yjbb.parquet   # PIT财报缓存(单一真相源)
+
+universe_pit:            # PIT宇宙构造参数(build_pit_universe)
+  min_list_days: 120     # 新股预热
+  exclude_st: true
+  top_n_liquidity: 1500  # 过去60日成交额中位数截面前N; null=不截断
+
 eval:
   quantiles: 5           # 分层数
   min_names: 30          # 单日截面最少股票数, 低于此日的IC作废

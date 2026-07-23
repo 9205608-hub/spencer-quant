@@ -1,6 +1,8 @@
 baostock
+akshare
 pandas
 numpy
 pyarrow
 matplotlib
 PyYAML
+scipy      # 仅测试依赖(tests/test_m9_opt.py 的 SLSQP 对照组); 优化器本体零依赖
