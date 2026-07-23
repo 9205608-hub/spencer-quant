@@ -1,0 +1,21 @@
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # 测试全部使用合成数据, 不碰网络 —— 数据源库(baostock/akshare)无需安装
+      - run: pip install pandas numpy pyarrow matplotlib PyYAML scipy
+      - name: run all test files
+        run: |
+          set -e
+          for t in tests/test_*.py; do
+            echo "== $t =="
+            python "$t"
+          done

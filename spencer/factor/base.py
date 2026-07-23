@@ -53,17 +53,32 @@ import pandas as pd
 from ..data.store import WideStore
 
 _REGISTRY: dict[str, Callable[[WideStore], pd.DataFrame]] = {}
+_META: dict[str, dict] = {}
 
 
-def factor(name: str):
-    """注册装饰器: @factor("mom_20_5")"""
+def factor(name: str, **meta):
+    """注册装饰器: @factor("mom_20_5") 或带登记元信息:
+
+        @factor("ep_ttm", author="spencer", tags=["fundamental"],
+                valid_from="2016-06-30", data_deps=["业绩报表"])
+
+    元信息是行业通行的"因子登记"概念(作者/标签/数据依赖/有效起始日),
+    供入库验证契约(verify.admission_check)与面板判读消费。
+    刻意不参与缓存指纹 —— 改备注不应触发因子重算。
+    """
     def deco(fn):
         if name in _REGISTRY:
             raise KeyError(f"因子重名: {name}")
         _REGISTRY[name] = fn
+        _META[name] = dict(meta)
         fn.factor_name = name
         return fn
     return deco
+
+
+def get_meta(name: str) -> dict:
+    """因子登记元信息(拷贝, 防外部原地改注册表)。未登记的键返回空 dict。"""
+    return dict(_META.get(name, {}))
 
 
 def list_factors() -> list[str]:

@@ -20,16 +20,20 @@
 
 ```
 spencer/
-  data/        数据层: 拉取(baostock) → 长表 → 宽表存储(date×code, 每字段一个parquet)
-  factor/      因子层: 注册表 + 缓存 + 末端对齐断言 | 横截面算子(去极值/标准化/翻正)
-  risk/        风险层: 自算五风格(size/beta/momentum/volatility/liquidity) + 行业
-               哑变量 + 逐日截面回归残差化(因子侧与标签侧通用)
-  eval/        评估层: 六件套面板(RankIC/保守t/逐年/月度热力图/秩自相关/分层多空)
-  backtest/    回测层: 带成本分层多空(研究级近似, 假设全部写明)
-  discipline/  纪律层: append-only 实验台账, N 计数 (与 alpha-court 桥接)
-docs/          必答30问(活清单) | 与工业级框架的能力对照
-examples/      quickstart: 端到端一条龙
-tests/         核心断言(前视闸门手工核对/中性化正交性/成本单调性)
+  data/        数据层: 拉取(baostock, 含退市股PIT名单) → 宽表存储 | PIT宇宙构造器
+  factor/      因子层: 注册表(带登记元信息) + 缓存指纹 + 末端断言 + 7因子 +
+               入库验证契约(verify.admission_check 七关门禁)
+  risk/        风险层: 自算六风格(五行情风格+BTOP PIT财报) + 行业哑变量 +
+               残差化(因子/标签两侧) + 协方差 Σ=BFB'+diag(spec²)(EWMA, PIT记账)
+  eval/        评估层: 六件套面板 + Newey-West t + 多horizon IC衰减曲线
+  backtest/    回测层: 成本后分层 + 一字板可成交过滤(执行日对表) + 冲击项
+  strategy/    策略层: 等权/ICIR合成 + 缓冲区top-N组合 + 目标持仓接口 +
+               FISTA优化器(截断单纯形+风格暴露带, KKT/恒等式现场检验)
+  model/       模型层: walk-forward GBM(已证伪结案, 见 output/falsify_model_gb.md)
+  discipline/  纪律层: append-only台账 + DSR + PBO(CSCV), N 从台账直读
+docs/          必答36问(活清单) | 工业级能力对照 | 吸收清单(概念级, 边界声明)
+examples/      quickstart / fetch_pit / pit_final_run / optimizer_demo / falsify
+tests/         9个测试文件全合成数据离线可跑(前视/PIT/正交性/成本单调/KKT)
 ```
 
 ## 快速开始（三步上手）
@@ -74,10 +78,11 @@ python examples/quickstart.py                # 3. 全量 a800(沪深300∪中证
 | M3 评估层 | 六件套 + Newey-West t + 多 horizon IC 衰减曲线 | ✅ |
 | M4 纪律层 | 台账+N计数 + DSR + PBO(CSCV) ✅；预注册工单制在 alpha-court | ✅ |
 | M5 回测层 | 成本后分层 + 一字板可成交过滤(执行日对表) + 冲击项 | ✅(研究级) |
-| M6 风格模型 | 五风格 + BTOP(PIT 财报, 披露日次日生效) + 行业 + 标签残差化 | 90%(协方差欠) |
-| M7 宇宙PIT | 构造器+合成测试 ✅；全市场含退市股数据接线 | 接线中 |
+| M6 风格模型 | 六风格 + 行业 + 标签残差化 + 协方差 Σ=BFB'+spec²(PIT记账) | ✅ |
+| M7 宇宙PIT | 构造器 + 全市场5791只含退市数据 + 终跑落地 | ✅ |
 | M8 模型层 | walk-forward GBM + **证伪三连结案**(output/falsify_model_gb.md) | ✅(已结案) |
-| M9 策略层 | 合成 + 缓冲组合 + 目标持仓接口 + FISTA 优化器(风格约束) | 90%(协方差接线欠) |
+| M9 策略层 | 合成 + 缓冲组合 + 目标持仓接口 + 优化器×风险模型真数据闭环 | ✅ |
+| M10 入库门禁 | 验证契约七关(verify) + 因子登记元信息(valid_from联动) | ✅ |
 
 **设计边界（不做，明示）**：撮合级回测与容量模型（日频数据的天花板）、
 行业分类历史时点化（无公开数据源）、实时行情与下单（执行端租平台）。
