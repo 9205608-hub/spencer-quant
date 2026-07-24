@@ -1,0 +1,13 @@
+{
+  "name": "icir_crash_protection",
+  "created_at": "2026-07-24 15:59:08",
+  "hypothesis": "icir_weight(252日窗, h+2移位)不能在2026-04~06动量崩盘中显著保护合成信号 —— 窗口惯性跟不上三个月崩盘+鞭打",
+  "criteria": {
+    "crash_ic_improve": 0.02,
+    "july_keep_ok": true,
+    "full_not_worse": true
+  },
+  "trial_budget": 1,
+  "stoploss": "一次性判定, 不追加调参不换窗口",
+  "notes": "研究员预测: 过不了闸(即保护不成立)。判据先于计算冻结。"
+}
