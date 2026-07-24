@@ -60,7 +60,8 @@ def build_context(need_covariance: bool = False) -> dict:
     comp, _ = orient(equal_weight(oriented), fwd_neut)
 
     ctx = dict(cfg=cfg, store=store, uni=uni, industry=industry, styles=styles,
-               fwd=fwd, fwd1=fwd1, fwd_neut=fwd_neut, comp=comp, h=h)
+               fwd=fwd, fwd1=fwd1, fwd_neut=fwd_neut, comp=comp, h=h,
+               oriented=oriented)
 
     if need_covariance:
         cov_dir = cfg["data_dir"] / "covariance"

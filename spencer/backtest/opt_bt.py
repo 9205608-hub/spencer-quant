@@ -27,7 +27,7 @@ def optimizer_backtest(signal: pd.DataFrame, fwd1: pd.DataFrame,
                        styles: dict, style_ret: pd.DataFrame, resid: pd.DataFrame,
                        rebal_days: int = 20, lam: float = 20.0, tau: float = 0.0,
                        cap: float = 0.02, bound: float = 0.10,
-                       ic_prior: float = 0.02, cost_bps: float = 15.0,
+                       ic_prior: float | pd.Series = 0.02, cost_bps: float = 15.0,
                        max_iter: int = 6000, warmup_obs: int = 150,
                        min_members: int = 100, verbose_every: int = 10) -> dict:
     rate = cost_bps / 1e4
@@ -36,7 +36,7 @@ def optimizer_backtest(signal: pd.DataFrame, fwd1: pd.DataFrame,
 
     weights = pd.DataFrame(0.0, index=idx, columns=signal.columns)
     prev_w: pd.Series | None = None
-    costs, kkts, solved = {}, [], 0
+    costs, kkts, ashares, solved = {}, [], [], 0
 
     for ri, dt in enumerate(rebal_dates):
         try:
@@ -55,7 +55,14 @@ def optimizer_backtest(signal: pd.DataFrame, fwd1: pd.DataFrame,
 
         z = sig[keep]
         z = ((z - z.mean()) / z.std()).to_numpy()
-        alpha = ic_prior * spec_k * z                    # Grinold: α = IC·σ·z
+        # ic_prior 可给 Series(date→滚动实测IC, 调用方负责 PIT 移位):
+        # 负先验截为 0 —— 信号近期失效时 α=0, 优化器自然缩回基准附近
+        if isinstance(ic_prior, pd.Series):
+            icp = ic_prior.asof(dt)
+            icp = 0.0 if pd.isna(icp) else max(float(icp), 0.0)
+        else:
+            icp = float(ic_prior)
+        alpha = icp * spec_k * z                         # Grinold: α = IC·σ·z
         w0 = np.full(len(keep), 1.0 / len(keep))
         wp = (prev_w.reindex(keep).fillna(0.0).to_numpy()
               if prev_w is not None else w0)
@@ -64,6 +71,7 @@ def optimizer_backtest(signal: pd.DataFrame, fwd1: pd.DataFrame,
                   cap=cap, B=B_k, bound=bound, max_iter=max_iter)
         w = pd.Series(np.asarray(r["w"], float), index=keep)
         kkts.append(r["kkt_residual"])
+        ashares.append(0.5 * float(np.abs(np.asarray(r["w"]) - w0).sum()))
         solved += 1
 
         prev_full = prev_w.reindex(w.index).fillna(0.0) if prev_w is not None \
@@ -95,5 +103,6 @@ def optimizer_backtest(signal: pd.DataFrame, fwd1: pd.DataFrame,
     return {"net_series": net, "weights": weights,
             "net_ann": net_ann, "net_sharpe": net_sh,
             "turnover_ann_oneside": round(to_ann, 1),
+            "active_share_mean": round(float(np.mean(ashares)), 3) if ashares else None,
             "n_rebalances": solved,
             "kkt_median": round(float(np.median(kkts)), 8) if kkts else None}
