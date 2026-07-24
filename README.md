@@ -43,7 +43,13 @@ pip install -r requirements.txt
 python tests/test_core.py                    # 1. 断言全绿(不碰网络)
 python examples/quickstart.py --limit 80     # 2. 冒烟: 80只股票端到端
 python examples/quickstart.py                # 3. 全量 a800(沪深300∪中证500)
+python examples/fetch_pit.py                 # 4. 全市场PIT数据(含退市, ~40min, 断点续跑)
+python examples/pit_final_run.py             # 5. 无幸存者偏差的正式口径终跑
+python examples/opt_backtest_run.py          # 6. 优化器逐期回测(需先跑4/5)
 ```
+
+严肃研究一律用步骤 4-6 的 PIT 口径；步骤 2-3 的快照宇宙只适合上手与冒烟
+（幸存者偏差, 30问#6）。
 
 产出：`output/` 下每因子×三档各一张面板图 + 逐年表，台账追加到
 `research_ledger.csv`。
