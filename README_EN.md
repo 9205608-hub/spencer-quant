@@ -59,6 +59,9 @@ python examples/fetch_pit.py              # full-market PIT data (incl. delisted
 python examples/pit_final_run.py          # survivorship-bias-free full run
 ```
 
+Detailed manual — what each entry point does, how to read the panels, how to
+register your own factor: [docs/使用指南.md](docs/使用指南.md) (Chinese).
+
 ## Honest limitations (by design)
 
 Match-level execution simulation and capacity modelling (beyond daily data),
