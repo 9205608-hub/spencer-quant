@@ -1,7 +1,8 @@
 """自算风格因子 —— Barra CNE5 公开白皮书思想的简化实现。
 
-v0.2 五风格: SIZE / BETA / MOMENTUM / VOLATILITY / LIQUIDITY。
-VALUE(BTOP) 需要财报数据源, 是明示欠账(30问#33)。
+本模块提供五个行情风格: SIZE / BETA / MOMENTUM / VOLATILITY / LIQUIDITY。
+第六风格 VALUE(BTOP) 需要财报 PIT 管道, 由 risk/fundamental.py 实现
+(30问#33 欠账已补), 集成方将其并入本模块产出的风格 dict。
 
 口径备注:
 - 市场收益用可得样本的等权均值(自洽, 不引入指数数据源)。

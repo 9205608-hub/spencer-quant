@@ -1,5 +1,7 @@
 # Spencer Framework — a daily-frequency equity factor research system, built from scratch
 
+*中文版: [README.md](README.md)*
+
 A complete factor-research pipeline built exclusively on **public data and
 public methodology**: data layer → factor zoo → style model & neutralization →
 three-tier evaluation panels → cost-aware backtest → portfolio construction →
@@ -40,6 +42,11 @@ No proprietary code, schemas, or constants from any institution.
   label" — full post-mortem in `output/falsify_model_gb.md`.
 - **White-box optimizer**: FISTA + capped-simplex projection with style
   exposure bands; KKT residuals and a λ→∞ identity check run on every demo.
+
+Sample tear sheet (`chip_age` @full_neut, survivorship-bias-free PIT run —
+note the panel does *not* hide the Q4>Q5 non-monotonicity):
+
+![chip_age@full_neut PIT panel](docs/img/panel_chip_age@full_neut_pit.png)
 
 ## Quickstart
 

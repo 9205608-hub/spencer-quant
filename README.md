@@ -1,5 +1,7 @@
 # Spencer 框架 — 从零自建的量化因子研究系统
 
+*English version: [README_EN.md](README_EN.md)*
+
 一套用**公开数据 + 公开方法论**从头搭建的日频因子研究全流程：
 数据 → 因子 → 风格模型与中性化 → 三档评估面板 → 成本后回测 → 研究纪律。
 目标不是"又一个回测库"，而是把一个量化研究系统必须回答的工程问题逐个
@@ -33,7 +35,8 @@ spencer/
   discipline/  纪律层: append-only台账 + DSR + PBO(CSCV), N 从台账直读
 docs/          必答36问(活清单) | 工业级能力对照 | 吸收清单(概念级, 边界声明)
 examples/      quickstart / fetch_pit / pit_final_run / optimizer_demo / falsify
-tests/         9个测试文件全合成数据离线可跑(前视/PIT/正交性/成本单调/KKT)
+tests/         12个测试文件65条断言全合成数据离线可跑(前视/PIT/正交性/成本单调/
+               KKT), 含 DSR/PSR/PBO 与 alpha-court 独立实现的交叉对拍
 ```
 
 ## 快速开始（三步上手）
@@ -63,6 +66,11 @@ python examples/opt_backtest_run.py          # 6. 优化器逐期回测(需先�
 | @raw | 原始 | 原始收益 | 混合了风格搭便车的总预测力 |
 | @size_neut | 剥市值 | 原始收益 | 去掉最大的一个便车 |
 | @full_neut | 剥行业+五风格 | 同样剥行业+五风格 | 纯 alpha 读数 |
+
+面板示例（chip_age 筹码龄因子 @full_neut，全市场 PIT 口径终跑）——
+分层收益 Q4>Q5 的非单调没有被藏起来，面板的职责是如实呈现：
+
+![chip_age@full_neut PIT 面板](docs/img/panel_chip_age@full_neut_pit.png)
 
 ## 设计上的几条硬规矩（都有血泪出处，全部通识化）
 
