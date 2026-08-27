@@ -57,6 +57,28 @@ flowchart LR
 
 ![chip_age@full_neut PIT panel](docs/img/panel_chip_age@full_neut_pit.png)
 
+## 🔬 Full-run results (full-market PIT universe, 5791 names × 10.5y, net of cost)
+
+- **Three-tier readings kill look-alike alpha on the spot**: `amihud_20` reads
+  IC 0.059 raw but **0.001 fully-neutralized** (pure style free-riding);
+  `vol_20` likewise (0.085 → 0.009, net long-short negative); `chip_age`
+  survives (0.084 → 0.015, NW-t 5.8); `rev_5` gets *stronger* (0.016 → 0.029,
+  NW-t 8.5).
+- **Composite & portfolio** (limit-board filtered, net): equal-weight
+  composite IC 0.026 / NW-t 6.0, net long-short 8.2%/yr (Sharpe 0.75);
+  buffered top-50 long-only excess +5.4%/yr (Sharpe 0.6) over universe
+  equal-weight, 15.4x annual one-sided turnover.
+- **Optimizer experiment** (recorded in commits v1.2/v1.4, re-runnable via
+  `examples/opt_backtest_run.py`): writing cost τ into the objective vs
+  charging ex-post — turnover 5.1x → 1.2x, net excess 0.65% → 1.46%; the τ-scan
+  net-excess peak lands exactly at the true 15bp cost rate.
+- **Then the discipline layer knifes the best number**: **DSR 0.466 after
+  N=60 ledger-counted trials — not significant**; 7-factor PBO φ = 0.067.
+  Every pretty number above is incomplete without this line — **this line is
+  the product**.
+
+Full tables: [output/PIT终跑报告.md](output/PIT终跑报告.md) (Chinese).
+
 ## 🚀 Quickstart
 
 ```bash

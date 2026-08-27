@@ -1,6 +1,7 @@
 /data/
 /output/*
 !/output/falsify_model_gb.md
+!/output/PIT终跑报告.md
 __pycache__/
 *.pyc
 .DS_Store
