@@ -94,4 +94,4 @@ broker platform — this repo outputs target holdings).
 
 ## License
 
-MIT © 2026 Binshan "Spencer" Si
+MIT © 2026 Spencer

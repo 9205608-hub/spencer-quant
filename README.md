@@ -169,4 +169,4 @@ config.yaml    单一真相源配置 —— 所有模块只从这里读参数
 
 ## License
 
-MIT © 2026 Binshan "Spencer" Si
+MIT © 2026 Spencer
