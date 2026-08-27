@@ -1,6 +1,13 @@
 /data/
-/output/
+/output/*
+!/output/falsify_model_gb.md
 __pycache__/
 *.pyc
 .DS_Store
 /research_ledger.csv
+# Claude Code machine-local settings
+.claude/settings.local.json
+# 本机工作区文件，不进仓库
+/CLAUDE.md
+/TIMELINE.md
+/.dispatch/
